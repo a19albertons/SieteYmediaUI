@@ -72,25 +72,32 @@ fun PantallaJuego(){
     val juego = remember { SieteYMedia ()}
     juego.anadirCartaJugador()
     var cartasJugador by remember { mutableStateOf(mostrarCartasJugador(juego)) }
+    var mostrarFinal by remember { mutableStateOf(false) }
     Column(
         modifier = Modifier.fillMaxSize().padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text(text = cartasJugador, fontSize = 24.sp)
-        Spacer(modifier = Modifier.height(20.dp))
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(10.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Button(onClick = {
-                juego.anadirCartaJugador()
-                cartasJugador = mostrarCartasJugador(juego)
-            }) {
-                Text("Carta")
-            }
-            Button(onClick = { pantallaFinal(juego) }) {
-                Text("Plantas")
+        if (mostrarFinal) {
+            pantallaFinal(juego)
+        }
+        else {
+            Text(text = cartasJugador, fontSize = 24.sp)
+            Text(text = juego.valorCartasJugador().toString(), fontSize = 24.sp)
+            Spacer(modifier = Modifier.height(20.dp))
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Button(onClick = {
+                    juego.anadirCartaJugador()
+                    cartasJugador = mostrarCartasJugador(juego)
+                }) {
+                    Text("Carta")
+                }
+                Button(onClick = { mostrarFinal = true }) {
+                    Text("Plantas")
+                }
             }
         }
     }
