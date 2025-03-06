@@ -106,13 +106,19 @@ fun PantallaJuego(){
 
 @Composable
 fun pantallaFinal(juego: SieteYMedia){
-
+    juego.anadirCartasBanca()
     Column(modifier = Modifier.padding(16.dp)) {
-        Text("Frase 1: Bienvenido a Compose for Desktop!")
-        Text("Frase 2: Este es un ejemplo simple.")
-        Text("Frase 3: Compose facilita el desarrollo de UI.")
-        Text("Frase 4: ¡Disfruta programando!")
-        Text(juego.mostrarJugador().toString())
+        Text("Turno de banca ...")
+        Text("")
+        Text("Éstas son mis cartas:")
+        Text(mostrarCartasBanca(juego))
+        Text(juego.valorCartasBanca().toString())
+        Text (if (!juego.DentroLimites(juego.valorCartasBanca())) {
+            "me pasé, ganas tú,jugador"
+        } else {
+            "Gana la banca"
+        }
+        )
     }
 }
 
