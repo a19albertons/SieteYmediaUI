@@ -3,11 +3,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -73,6 +69,7 @@ fun PantallaJuego(){
     juego.anadirCartaJugador()
     var cartasJugador by remember { mutableStateOf(mostrarCartasJugador(juego)) }
     var mostrarFinal by remember { mutableStateOf(false) }
+    var valorCartas by remember { mutableStateOf(juego.valorCartasJugador()) }
     Column(
         modifier = Modifier.fillMaxSize().padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -81,9 +78,9 @@ fun PantallaJuego(){
         if (mostrarFinal) {
             pantallaFinal(juego)
         }
-        else {
+        else if (juego.DentroLimites(valorCartas)) {
             Text(text = cartasJugador, fontSize = 24.sp)
-            Text(text = juego.valorCartasJugador().toString(), fontSize = 24.sp)
+            Text(text = valorCartas.toString(), fontSize = 24.sp)
             Spacer(modifier = Modifier.height(20.dp))
             Row(
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
@@ -92,6 +89,7 @@ fun PantallaJuego(){
                 Button(onClick = {
                     juego.anadirCartaJugador()
                     cartasJugador = mostrarCartasJugador(juego)
+                    valorCartas = juego.valorCartasJugador()
                 }) {
                     Text("Carta")
                 }
@@ -100,11 +98,15 @@ fun PantallaJuego(){
                 }
             }
         }
+        else {
+            Text("Jugador, te has pasado en tu jugada anterior, gana la banca\nAdios",modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
+        }
     }
 }
 
 @Composable
 fun pantallaFinal(juego: SieteYMedia){
+
     Column(modifier = Modifier.padding(16.dp)) {
         Text("Frase 1: Bienvenido a Compose for Desktop!")
         Text("Frase 2: Este es un ejemplo simple.")
@@ -117,6 +119,16 @@ fun pantallaFinal(juego: SieteYMedia){
 
 fun mostrarCartasJugador(juego: SieteYMedia):String {
     val resultados = juego.mostrarJugador()
+    var devolver=resultados[0].toString()
+    for (i in 1..resultados.size-1) {
+        if (resultados[i] != null) {
+            devolver=devolver+" "+resultados[i]
+        }
+    }
+    return devolver
+}
+fun mostrarCartasBanca(juego: SieteYMedia):String {
+    val resultados = juego.mostrarBanca()
     var devolver=resultados[0].toString()
     for (i in 1..resultados.size-1) {
         if (resultados[i] != null) {
