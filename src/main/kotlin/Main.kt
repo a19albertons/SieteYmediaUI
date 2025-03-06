@@ -69,26 +69,54 @@ fun App() {
 @Composable
 @Preview
 fun PantallaJuego(){
-    val juego:SieteYMedia
+    val juego = remember { SieteYMedia ()}
+    juego.anadirCartaJugador()
+    var cartasJugador by remember { mutableStateOf(mostrarCartasJugador(juego)) }
     Column(
         modifier = Modifier.fillMaxSize().padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text(text = "Bienvenido al juego", fontSize = 24.sp)
+        Text(text = cartasJugador, fontSize = 24.sp)
         Spacer(modifier = Modifier.height(20.dp))
         Row(
             horizontalArrangement = Arrangement.spacedBy(10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Button(onClick = { /* Acción botón 1 */ }) {
+            Button(onClick = {
+                juego.anadirCartaJugador()
+                cartasJugador = mostrarCartasJugador(juego)
+            }) {
                 Text("Carta")
             }
-            Button(onClick = { /* Acción botón 2 */ }) {
-                Text("plantas")
+            Button(onClick = { pantallaFinal(juego) }) {
+                Text("Plantas")
             }
         }
     }
+}
+
+@Composable
+fun pantallaFinal(juego: SieteYMedia){
+    Column(modifier = Modifier.padding(16.dp)) {
+        Text("Frase 1: Bienvenido a Compose for Desktop!")
+        Text("Frase 2: Este es un ejemplo simple.")
+        Text("Frase 3: Compose facilita el desarrollo de UI.")
+        Text("Frase 4: ¡Disfruta programando!")
+        Text(juego.mostrarJugador().toString())
+    }
+}
+
+
+fun mostrarCartasJugador(juego: SieteYMedia):String {
+    val resultados = juego.mostrarJugador()
+    var devolver=resultados[0].toString()
+    for (i in 1..resultados.size-1) {
+        if (resultados[i] != null) {
+            devolver=devolver+" "+resultados[i]
+        }
+    }
+    return devolver
 }
 
 fun main() = application {
