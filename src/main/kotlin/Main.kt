@@ -77,12 +77,16 @@ fun PantallaJuego(){
     ) {
         Text(text = "Bienvenido al juego", fontSize = 24.sp)
         Spacer(modifier = Modifier.height(20.dp))
-        Button(onClick = { /* Acción botón 1 */ }) {
-            Text("Opción 1")
-        }
-        Spacer(modifier = Modifier.height(10.dp))
-        Button(onClick = { /* Acción botón 2 */ }) {
-            Text("Opción 2")
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Button(onClick = { /* Acción botón 1 */ }) {
+                Text("Carta")
+            }
+            Button(onClick = { /* Acción botón 2 */ }) {
+                Text("plantas")
+            }
         }
     }
 }
