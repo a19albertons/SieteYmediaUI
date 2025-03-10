@@ -65,18 +65,24 @@ fun App() {
 @Composable
 @Preview
 fun PantallaJuego(){
-    val juego = remember { SieteYMedia ()}
-    juego.anadirCartaJugador()
+    var juego by remember { mutableStateOf(SieteYMedia ())}
+    var primera_vez by remember { mutableStateOf(true) }
+    if (primera_vez==true) {
+        juego.anadirCartaJugador()
+        primera_vez = false
+    }
     var cartasJugador by remember { mutableStateOf(mostrarCartasJugador(juego)) }
     var mostrarFinal by remember { mutableStateOf(false) }
     var valorCartas by remember { mutableStateOf(juego.valorCartasJugador()) }
+
+
     Column(
         modifier = Modifier.fillMaxSize().padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         if (mostrarFinal) {
-            pantallaFinal(juego)
+            PantallaFinal(juego)
         }
         else if (juego.DentroLimites(valorCartas)) {
             Text(text = cartasJugador, fontSize = 24.sp)
@@ -100,13 +106,23 @@ fun PantallaJuego(){
         }
         else {
             Text("Jugador, te has pasado en tu jugada anterior, gana la banca\nAdios",modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
+            Button(onClick = {
+                juego = SieteYMedia()
+                juego.anadirCartaJugador()
+                cartasJugador = mostrarCartasJugador(juego)
+                valorCartas = juego.valorCartasJugador()
+            }) {
+                Text("Reiniciar juego")
+            }
         }
     }
 }
 
 @Composable
-fun pantallaFinal(juego: SieteYMedia){
+fun PantallaFinal(juego: SieteYMedia){
     juego.anadirCartasBanca()
+    var reiniciarJuego by remember { mutableStateOf(false) }
+    if (reiniciarJuego == false)
     Column(modifier = Modifier.padding(16.dp)) {
         Text("Turno de banca ...")
         Text("")
@@ -119,6 +135,14 @@ fun pantallaFinal(juego: SieteYMedia){
             "Gana la banca"
         }
         )
+        Button(onClick = {
+            reiniciarJuego=true
+        }) {
+            Text("Reinicar juego")
+        }
+    }
+    else {
+        PantallaJuego()
     }
 }
 
